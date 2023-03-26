@@ -12,7 +12,6 @@ function App() {
         <br />
         <InputBox />
         <br/>
-        <ViewingTab/>
       </div>
     </ChakraProvider>
   );
