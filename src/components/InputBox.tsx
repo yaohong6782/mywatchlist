@@ -29,7 +29,7 @@ const reducer = (state: InitialState, action: ActionState) => {
 const InputBox = () => {
   //   const [inputData, setInputData] = useState<string>();
   const [searching, setSearching] = useState<boolean>(false);
-
+  const [searchResult, setSearchResult] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +43,7 @@ const InputBox = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearching(true);
+    setSearchResult(state.title);
     console.log(state.title);
   };
 
@@ -63,7 +64,7 @@ const InputBox = () => {
         </form>
       </div>
       <br />
-      {searching && <SearchedView searchValue={state.title} />}
+      {searching && <SearchedView searchValue={searchResult} />}
       <br />
       <ViewingTab />
     </>

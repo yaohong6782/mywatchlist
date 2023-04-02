@@ -7,17 +7,17 @@ const ViewingTab = () => {
   return (
     <Tabs align="center" variant="enclosed">
       <TabList>
-        <Tab>Korean Drama</Tab>
         <Tab>Manhwa</Tab>
+        <Tab>Korean Drama</Tab>
         <Tab>Movies</Tab>
       </TabList>
 
       <TabPanels>
         <TabPanel>
-          <p>one!</p>
+          <Manhwa />
         </TabPanel>
         <TabPanel>
-            <Manhwa/>
+          <p>two!</p>
         </TabPanel>
         <TabPanel>
           <p>three!</p>
