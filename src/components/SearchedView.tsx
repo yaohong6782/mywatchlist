@@ -16,18 +16,17 @@ type Manhwa = {
 type ManhwaId = {
   id: Record<string, string>;
 };
-const MANHWA_COVER_URL =
-  "https://api.mangadex.org/cover?limit=10&manga={manga_id}";
 
 const SearchedView = ({ searchValue }: SearchValue) => {
   const [manhwa, setManhwa] = useState<Manhwa[]>([]);
   const [manhwaId, setManhwaId] = useState<string[]>([]);
+  const [manhwaCoverId, setManhwaCoverId] = useState<string[]>([]);
 
   useEffect(() => {
     if (searchValue) {
       searchManhwa(searchValue)
         .then((response) => {
-          console.log(response.data);
+          console.log("first ", response.data);
           setManhwa(response.data);
           setManhwaId(response.data.map((manga: ManhwaId) => manga.id));
         })
@@ -37,17 +36,28 @@ const SearchedView = ({ searchValue }: SearchValue) => {
     }
   }, [searchValue]);
 
-  console.log("cover ids ", manhwaId); // cover id
+  console.log("manhwa ids ", manhwaId); // cover id
 
+  // grab cover id
   useEffect(() => {
     if (manhwaId.length > 0) {
       const mangaIdParam = manhwaId.map((id) => `manga%5B%5D=${id}`).join("&");
-      console.log('manga id param ', mangaIdParam)
+      console.log("manga id param ", mangaIdParam);
       const url = `https://api.mangadex.org/cover?limit=10&${mangaIdParam}`;
       axios
         .get(url)
         .then((response) => {
-          console.log(response.data);
+          console.log("cover id response ", response.data);
+          console.log(
+            "cover id response 2 ",
+            response.data.data.map((item: any) => item.attributes.fileName)
+          );
+
+          const coverFileName = response.data.data.map(
+            (item: any) => item.attributes.fileName
+          );
+          setManhwaCoverId(coverFileName);
+          //   setManhwaCoverId(response.data.attributes?.map((fileName : any) => fileName.fileName));
         })
         .catch((error) => {
           console.log(error);
@@ -55,30 +65,22 @@ const SearchedView = ({ searchValue }: SearchValue) => {
     }
   }, [manhwaId]);
 
-  console.log("state ", manhwa); // entire response consisting of manga id
+  console.log("cover id ", manhwaCoverId);
+  const RETRIEVE_COVER_URL =
+    "https://uploads.mangadex.org/covers/:manga-id/:cover-filename";
 
-  //   useEffect(() => {
-  //     if (manhwaId.length > 0) {
-  //       const coverPromises = manhwaId.map((id : any) => {
-  //         const url = MANHWA_COVER_URL.replace("{manga_id}", id);
-  //         return axios.get(url).then((response) => response.data);
-  //       });
-
-  //       Promise.all(coverPromises)
-  //         .then((coverResponses) => {
-  //           console.log(coverResponses); // An array of cover image data for each manga ID
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         });
-  //     }
-  //   }, [manhwaId]);
-
+  useEffect(() => {});
   return (
-    <div className="grid grid-cols-3 gap-3">
-      {manhwa.map((item) => (
-        <Card maxW="lg" key={item.id}>
+    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 justify-items-center align-items-center">
+      {manhwa.map((item : any, index : number) => (
+        <Card maxW="xs" key={item.id}>
           <CardBody>
+            <img
+              src={
+                `https://uploads.mangadex.org/covers/${item.id}/${manhwaCoverId[index]}`
+              }
+              alt=""
+            />
             <h2>{item.attributes?.title.en}</h2>
             <h2>{item.id}</h2>
           </CardBody>
