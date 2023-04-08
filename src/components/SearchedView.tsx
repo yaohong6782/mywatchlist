@@ -18,35 +18,23 @@ type ManhwaId = {
 
 const SearchedView = ({ searchValue }: SearchValue) => {
   const GET_MANHWA_API = `https://api.mangadex.org/manga?limit=10&title=${searchValue}`;
-  const GET_COVER_API = `https://api.mangadex.org/cover?limit=10`;
   const RETRIEVE_COVER_URL =
     "https://uploads.mangadex.org/covers/:manga-id/:cover-filename";
 
   // const coverUrl = `https://uploads.mangadex.org/covers/${manhwa.id}/${manhwa.attributes?.coverArt?.[0]}.256.jpg`;
   const [manhwaList, setManhwaList] = useState<any>([]);
+  const [manhwaArticles, setManhwaArticles] = useState<any>({});
+  const [manhwaCardsList, setManhwaCardsList] = useState<any>([]);
   let manhwaIdListRef = useRef([]);
-//   let manhwaIdList = [];
-
-  interface CoverApiResponse {
-    data: {
-      id: string;
-      type: string;
-      attributes: {
-        fileName: string;
-      };
-      relationships: {
-        type: string;
-        id: string;
-      }[];
-    }[];
-  }
+  let manhwaIdList = [];
 
   useEffect(() => {
     if (searchValue) {
       axios
         .get(GET_MANHWA_API)
         .then((res) => {
-          console.log(res.data.data);
+          //   console.log(res.data.data);
+          //   console.log(res.data.data[0].relationships);
           setManhwaList(res.data.data);
           manhwaIdListRef.current = res.data.data.map(
             (mangaId: any) => mangaId.id
@@ -58,14 +46,38 @@ const SearchedView = ({ searchValue }: SearchValue) => {
     }
   }, [GET_MANHWA_API, searchValue]);
 
+  // grabbed list of cover ids
+  const manhwaCoverArtIds = manhwaList.map((manhwa: any) => {
+    const coverArtRelationship = manhwa.relationships.find(
+      (relationship: any) => relationship.type === "cover_art"
+    );
+    return coverArtRelationship.id;
+  });
 
+  console.log("cover ids ", manhwaCoverArtIds);
+  const idsUrl = manhwaCoverArtIds.join("&ids%5B%5D=");
+  const coverApiUrl = `https://api.mangadex.org/cover?ids%5B%5D=${idsUrl}`;
+  console.log("cover api url ", coverApiUrl);
+
+  // grabbing file name
+  useEffect(() => {
+    if (manhwaCoverArtIds.length > 0) {
+      axios
+        .get(coverApiUrl)
+        .then((res) => {
+          console.log("package ", res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  });
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 justify-items-center align-items-center">
       {manhwaList.map((manhwa: any, idx: number) => {
         return (
           <div key={idx}>
             <p>{manhwa.attributes.title.en}</p>
-            <p>{manhwa.attributes.coverArt}</p>
           </div>
         );
       })}
