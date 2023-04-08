@@ -8,19 +8,10 @@ const ViewingTab = () => {
     <Tabs align="center" variant="enclosed">
       <TabList>
         <Tab>Manhwa</Tab>
-        <Tab>Korean Drama</Tab>
-        <Tab>Movies</Tab>
       </TabList>
-
       <TabPanels>
         <TabPanel>
           <Manhwa />
-        </TabPanel>
-        <TabPanel>
-          <p>two!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>three!</p>
         </TabPanel>
       </TabPanels>
     </Tabs>
