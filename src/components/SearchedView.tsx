@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Card, CardBody } from "@chakra-ui/card";
-import { Image } from "@chakra-ui/react";
+import { Divider, Heading, Image, Stack, Text } from "@chakra-ui/react";
 
 type SearchValue = {
   searchValue: string | null;
@@ -41,13 +41,13 @@ const SearchedView = ({ searchValue }: SearchValue) => {
         });
     }
   }, [searchValue, GET_MANHWA_API]);
-  console.log("manga data ", mangaData);
+//   console.log("manga data ", mangaData);
 
   let mangaID = mangaData?.map((item: any) => {
     return item.id;
   });
 
-  console.log(mangaID);
+  //   console.log(mangaID);
   //   console.log(mangaData)
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 justify-items-center align-items-center">
@@ -56,13 +56,22 @@ const SearchedView = ({ searchValue }: SearchValue) => {
           (rel: any) => rel.type === "cover_art"
         );
         const mangaId = item.id;
-        const coverArtId = coverArtRelationship?.id || "";
+        // const coverArtId = coverArtRelationship?.id || "";
         const coverArtFileName = coverArtRelationship?.attributes.fileName;
         return (
-          <div key={idx}>
-            <p>{item.attributes?.title.en}</p>
-            <Image src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}`}/>
-          </div>
+          <Card maxW="lg">
+            <div key={idx}>
+              <CardBody>
+                <Stack mt="6" spacing="3">
+                  <Heading size="md">{item.attributes?.title.en}</Heading>
+                  <Divider />
+                </Stack>
+                <Image
+                  src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}.512.jpg`}
+                />
+              </CardBody>
+            </div>
+          </Card>
         );
       })}
     </div>
