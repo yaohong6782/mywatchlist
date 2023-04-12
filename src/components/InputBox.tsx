@@ -1,6 +1,7 @@
 import React, { useState, useReducer } from "react";
 import SearchedView from "./SearchedView";
 import ViewingTab from "./ViewingTab";
+import { Button } from "@chakra-ui/react";
 
 type InitialState = {
   title: string;
@@ -21,13 +22,15 @@ const reducer = (state: InitialState, action: ActionState) => {
     case "onChange":
       return { ...state, [action.field!]: action.value! };
 
+    case "clearInput":
+      return initialState;
+
     default:
       throw new Error();
   }
 };
 
 const InputBox = () => {
-  //   const [inputData, setInputData] = useState<string>();
   const [searching, setSearching] = useState<boolean>(false);
   const [searchResult, setSearchResult] = useState<string | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -40,6 +43,13 @@ const InputBox = () => {
     });
   };
 
+  const clearInput = (event: any) => {
+    dispatch({
+      type: "clearInput",
+    });
+    setSearchResult(null);
+  };
+
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearching(true);
@@ -47,9 +57,6 @@ const InputBox = () => {
     console.log(state.title);
   };
 
-  //   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setInputData(e.target.value);
-  //   };
   return (
     <>
       <div className="flex justify-center">
@@ -59,8 +66,12 @@ const InputBox = () => {
             className="rounded-lg border-2 border-indigo-500/100 px-2"
             type="text"
             name="title"
+            value={state.title}
             onChange={inputHandler}
           />
+          <Button type="button" className="px-3" onClick={clearInput}>
+            Clear
+          </Button>
         </form>
       </div>
       <br />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Card, CardBody } from "@chakra-ui/card";
-import { Divider, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import { Button, Image } from "@chakra-ui/react";
 
 type SearchValue = {
   searchValue: string | null;
@@ -14,8 +14,7 @@ type Manhwa = {
 };
 
 const SearchedView = ({ searchValue }: SearchValue) => {
-  //   const baseUrl = "https://api.mangadex.org";
-  //   const GET_MANHWA_API = `${baseUrl}/manga?limit=10&title=${searchValue}&includes%5B%5D=cover_art`;
+//   console.log("null ", searchValue);
   //   const REFERNCE_EXPANSION_API = `https://api.mangadex.org/manga/${mangaId}?includes[]=cover_art`
   const baseUrl = "https://api.mangadex.org";
   const GET_MANHWA_API = `${baseUrl}/manga`;
@@ -41,14 +40,17 @@ const SearchedView = ({ searchValue }: SearchValue) => {
         });
     }
   }, [searchValue, GET_MANHWA_API]);
-//   console.log("manga data ", mangaData);
+  //   console.log("manga data ", mangaData);
+  useEffect(() => {
+    if (searchValue == null) {
+      setMangaData(null);
+    }
+  }, [searchValue]);
 
   let mangaID = mangaData?.map((item: any) => {
     return item.id;
   });
 
-  //   console.log(mangaID);
-  //   console.log(mangaData)
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 justify-items-center align-items-center">
       {mangaData?.map((item: any, idx: number) => {
@@ -59,19 +61,15 @@ const SearchedView = ({ searchValue }: SearchValue) => {
         // const coverArtId = coverArtRelationship?.id || "";
         const coverArtFileName = coverArtRelationship?.attributes.fileName;
         return (
-          <Card maxW="lg">
-            <div key={idx}>
-              <CardBody>
-                <Stack mt="6" spacing="3">
-                  <Heading size="md">{item.attributes?.title.en}</Heading>
-                  <Divider />
-                </Stack>
-                <Image
-                  src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}.512.jpg`}
-                />
-              </CardBody>
+          <div key={idx}>
+            <div>
+              <p>{item.attributes?.title.en}</p>
             </div>
-          </Card>
+            <Image
+              src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}.256.jpg`}
+              className="flex justify-items-center items-center"
+            />
+          </div>
         );
       })}
     </div>
