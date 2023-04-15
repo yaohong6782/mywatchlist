@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Card, CardBody } from "@chakra-ui/card";
-import { Button, Image } from "@chakra-ui/react";
+import { Button, Image, Heading } from "@chakra-ui/react";
 
 type SearchValue = {
   searchValue: string | null;
@@ -53,7 +53,7 @@ const SearchedView = ({ searchValue }: SearchValue) => {
 
   console.log(mangaData);
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 justify-items-center">
+    <>
       {mangaData?.map((item: any, idx: number) => {
         const coverArtRelationship = item.relationships.find(
           (rel: any) => rel.type === "cover_art"
@@ -64,7 +64,7 @@ const SearchedView = ({ searchValue }: SearchValue) => {
         return (
           <div key={idx}>
             <div>
-              {/* <p>{item.attributes?.title.en}</p> */}
+              <Heading as="h4" size="md">{item.attributes?.title.en}</Heading>
               <Image
                 src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}.256.jpg`}
                 className="flex justify-items-center items-center"
@@ -74,7 +74,7 @@ const SearchedView = ({ searchValue }: SearchValue) => {
           </div>
         );
       })}
-    </div>
+    </>
   );
 };
 
