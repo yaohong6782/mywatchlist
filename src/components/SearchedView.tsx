@@ -14,7 +14,7 @@ type Manhwa = {
 };
 
 const SearchedView = ({ searchValue }: SearchValue) => {
-//   console.log("null ", searchValue);
+  //   console.log("null ", searchValue);
   //   const REFERNCE_EXPANSION_API = `https://api.mangadex.org/manga/${mangaId}?includes[]=cover_art`
   const baseUrl = "https://api.mangadex.org";
   const GET_MANHWA_API = `${baseUrl}/manga`;
@@ -51,8 +51,9 @@ const SearchedView = ({ searchValue }: SearchValue) => {
     return item.id;
   });
 
+  console.log(mangaData);
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 justify-items-center align-items-center">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 justify-items-center">
       {mangaData?.map((item: any, idx: number) => {
         const coverArtRelationship = item.relationships.find(
           (rel: any) => rel.type === "cover_art"
@@ -63,12 +64,13 @@ const SearchedView = ({ searchValue }: SearchValue) => {
         return (
           <div key={idx}>
             <div>
-              <p>{item.attributes?.title.en}</p>
+              {/* <p>{item.attributes?.title.en}</p> */}
+              <Image
+                src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}.256.jpg`}
+                className="flex justify-items-center items-center"
+              />
             </div>
-            <Image
-              src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}.256.jpg`}
-              className="flex justify-items-center items-center"
-            />
+            {/* <p>{item.attributes.description.en}</p> */}
           </div>
         );
       })}

@@ -77,7 +77,7 @@ const InputBox = () => {
       <br />
       {searching && <SearchedView searchValue={searchResult} />}
       <br />
-      <ViewingTab />
+      {/* <ViewingTab /> */}
     </>
   );
 };

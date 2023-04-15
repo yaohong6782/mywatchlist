@@ -25,7 +25,8 @@ const Manhwa = () => {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
+            
+          {/* <Tr>
             <Td>inches</Td>
             <Td>millimetres (mm)</Td>
             <Td>millimetres (mm)</Td>
@@ -42,7 +43,7 @@ const Manhwa = () => {
             <Td>metres (m)</Td>
             <Td>metres (m)</Td>
             <Td>metres (m)</Td>
-          </Tr>
+          </Tr> */}
         </Tbody>
         {/* <Tfoot>
           <Tr>
