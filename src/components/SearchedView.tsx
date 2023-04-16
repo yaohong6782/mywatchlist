@@ -14,7 +14,6 @@ type Manhwa = {
 };
 
 const SearchedView = ({ searchValue }: SearchValue) => {
-  //   console.log("null ", searchValue);
   //   const REFERNCE_EXPANSION_API = `https://api.mangadex.org/manga/${mangaId}?includes[]=cover_art`
   const baseUrl = "https://api.mangadex.org";
   const GET_MANHWA_API = `${baseUrl}/manga`;
@@ -51,7 +50,7 @@ const SearchedView = ({ searchValue }: SearchValue) => {
     return item.id;
   });
 
-  console.log(mangaData);
+//   console.log(mangaData);
   return (
     <>
       {mangaData?.map((item: any, idx: number) => {

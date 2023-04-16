@@ -61,7 +61,7 @@ const InputBox = () => {
     <>
       <div className="flex justify-center">
         <form onSubmit={handleFormSubmit}>
-          <label className="text-lg font-bold ">Title : </label>
+          <label className="text-lg font-bold ">Manga : </label>
           <input
             className="rounded-lg border-2 border-indigo-500/100 px-2"
             type="text"
