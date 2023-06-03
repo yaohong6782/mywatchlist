@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setMangaData } from "../actions/mangaSlice";
 import axios from "axios";
+
 import { Card, CardBody } from "@chakra-ui/card";
 import { Button, Image, Heading } from "@chakra-ui/react";
+
+// const REFERNCE_EXPANSION_API = `https://api.mangadex.org/manga/${mangaId}?includes[]=cover_art`
 
 type SearchValue = {
   searchValue: string | null;
@@ -14,12 +19,11 @@ type Manhwa = {
 };
 
 const SearchedView = ({ searchValue }: SearchValue) => {
-  //   const REFERNCE_EXPANSION_API = `https://api.mangadex.org/manga/${mangaId}?includes[]=cover_art`
   const baseUrl = "https://api.mangadex.org";
   const GET_MANHWA_API = `${baseUrl}/manga`;
-  const [mangaData, setMangaData] = useState<any>();
-  const [mangaCardData, setMangaCardData] = useState<any>([]);
 
+  const dispatch = useDispatch();
+  const mangaData = useSelector((state: any) => state.manga.mangaData);
   useEffect(() => {
     if (searchValue) {
       axios
@@ -31,26 +35,22 @@ const SearchedView = ({ searchValue }: SearchValue) => {
           },
         })
         .then((res) => {
-          //   console.log(res.data);
-          setMangaData(res.data.data);
+          dispatch(setMangaData(res.data.data));
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [searchValue, GET_MANHWA_API]);
-  //   console.log("manga data ", mangaData);
+  }, [searchValue, GET_MANHWA_API, dispatch]);
+
   useEffect(() => {
     if (searchValue == null) {
       setMangaData(null);
     }
   }, [searchValue]);
 
-  let mangaID = mangaData?.map((item: any) => {
-    return item.id;
-  });
 
-//   console.log(mangaData);
+
   return (
     <>
       {mangaData?.map((item: any, idx: number) => {
@@ -63,7 +63,9 @@ const SearchedView = ({ searchValue }: SearchValue) => {
         return (
           <div key={idx}>
             <div>
-              <Heading as="h4" size="md">{item.attributes?.title.en}</Heading>
+              <Heading as="h4" size="md">
+                {item.attributes?.title.en}
+              </Heading>
               <Image
                 src={`https://uploads.mangadex.org/covers/${mangaId}/${coverArtFileName}.256.jpg`}
                 className="flex justify-items-center items-center"
@@ -78,3 +80,30 @@ const SearchedView = ({ searchValue }: SearchValue) => {
 };
 
 export default SearchedView;
+
+
+  // Old version using state , currently using redux as implemented above
+  //   const [mangaData, setMangaData] = useState<any>();
+  //   const [mangaCardData, setMangaCardData] = useState([]);
+
+  //   useEffect(() => {
+  //     if (searchValue) {
+  //       axios
+  //         .get(GET_MANHWA_API, {
+  //           params: {
+  //             limit: 10,
+  //             title: searchValue,
+  //             includes: ["cover_art"],
+  //           },
+  //         })
+  //         .then((res) => {
+  //           //   console.log(res.data);
+  //           setMangaData(res.data.data);
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }
+  //   }, [searchValue, GET_MANHWA_API]);
+
+  //   console.log("manga data ", mangaData);
